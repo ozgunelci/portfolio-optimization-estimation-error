@@ -1,1 +1,6 @@
 /codes/main_trial.py
+/outputs/frontier/*.txt
+/outputs/frontier/*.pdf
+/outputs/histogram/*.txt
+/outputs/histogram/*.pdf
+/outputs/kappa_n/*.txt

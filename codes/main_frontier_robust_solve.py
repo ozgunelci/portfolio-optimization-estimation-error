@@ -6,7 +6,7 @@ start = time.time()
 # input
 seed = 0
 numSamples = 24
-numTrials = 10000
+numTrials = 10
 
 experiment_name = '_figure_robust'
 experiment_name += '_error_cov_0001' + '_seed_' + str(seed) + '_sample_' + str(numSamples) + '_trial_' + str(numTrials)
@@ -51,7 +51,7 @@ robust_actual_frontier = robust_results.actual_frontier
 # save the results to a txt file
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs_frontier'
+folder_name = 'outputs/frontier'
 
 # markowitz actual
 file_name = 'markowitz_actual' + experiment_name + '.txt'

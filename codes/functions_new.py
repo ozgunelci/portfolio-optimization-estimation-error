@@ -174,11 +174,11 @@ def drawFrontiers(name, true_frontier, v_array,
     # because x and y axis of an axes maybe inversed.
     ax.set_aspect(abs((xright - xleft) / (ybottom - ytop)) * ratio)
 
-    plt.show()
+    # plt.show()
 
     # get the directory of the project
     project_directory = os.getcwd()
-    folder_name = 'outputs_frontier'
+    folder_name = 'outputs\\frontier'
     figure_name = name + '.pdf'
     save_directory = os.path.join(project_directory, folder_name, figure_name)
 
@@ -243,7 +243,7 @@ def solveProblems_final(seed, numTrials, numSamples, kappa, assets):
         numSamples) + '_risk_' + v_dec
 
     project_directory = os.getcwd()
-    folder_name = 'outputs_kappa_n_new'
+    folder_name = 'outputs/kappa_n'
 
     # obtain solutions
     data = read_burak_data()

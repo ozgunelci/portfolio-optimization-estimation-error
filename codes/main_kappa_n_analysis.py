@@ -4,10 +4,9 @@ from functions_new import *
 import os
 
 seed = 0
-numTrials = 10000
+numTrials = 10
 
-# kappa_n_range = np.linspace(1e-1, 1.0, 10)
-kappa_n_range = np.array([0.45, 0.55])
+kappa_n_range = np.linspace(1e-1, 1.0, 10)
 samples_array = np.array([1.0, 3.0, 6.0, 12.0, 24.0, 120.0])
 
 numSamples = len(samples_array)
@@ -18,10 +17,10 @@ markowitz_returns = np.zeros([numSamples, numKappa])
 
 assets = range(11)
 
-# for i in range(numSamples):
-#     result = solveProblems_final(seed, numTrials, samples_array[i], -1, assets)
-#     for j in range(numKappa):
-#         markowitz_returns[i][j] = result
+for i in range(numSamples):
+    result = solveProblems_final(seed, numTrials, samples_array[i], -1, assets)
+    for j in range(numKappa):
+        markowitz_returns[i][j] = result
 
 for i in range(len(samples_array)):
     for j in range(len(kappa_n_range)):
@@ -33,11 +32,11 @@ for i in range(len(samples_array)):
 
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs_kappa_n_new'
+folder_name = 'outputs/kappa_n'
 
-# file_name_markowitz = 'markowitz_results_kn.txt'
-# save_directory_markowitz = os.path.join(project_directory, folder_name, file_name_markowitz)
-# np.savetxt(save_directory_markowitz, markowitz_returns, delimiter='\t')
+file_name_markowitz = 'markowitz_results_kn.txt'
+save_directory_markowitz = os.path.join(project_directory, folder_name, file_name_markowitz)
+np.savetxt(save_directory_markowitz, markowitz_returns, delimiter='\t')
 
 file_name_robust = 'robust_results_kn.txt'
 save_directory_robust = os.path.join(project_directory, folder_name, file_name_robust)

@@ -6,14 +6,14 @@ start = time.time()
 # input
 seed = 0
 numSamples = 24
-numTrials = 10000
+numTrials = 10
 
 experiment_name = '_figure_robust'
 experiment_name += '_error_cov_0001' + '_seed_' + str(seed) + '_sample_' + str(numSamples) + '_trial_' + str(numTrials)
 
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs_frontier'
+folder_name = 'outputs/frontier'
 
 file_name_markowitz_actual = 'markowitz_actual' + experiment_name + '.txt'
 file_name_markowitz_estimated = 'markowitz_estimated' + experiment_name + '.txt'

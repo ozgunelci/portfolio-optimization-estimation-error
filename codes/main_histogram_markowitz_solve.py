@@ -44,7 +44,7 @@ print('markowitz actual = ' + str(sum(markowitz_actual_points) / numTrials))
 
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs_histogram'
+folder_name = 'outputs/histogram'
 
 # save the actual points to a txt file
 file_name = 'markowitz_actual_' + experiment_name + '.txt'

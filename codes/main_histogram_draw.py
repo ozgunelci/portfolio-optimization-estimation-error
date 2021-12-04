@@ -3,8 +3,8 @@ from matplotlib import pyplot
 import os
 
 # inputs
-numTrial = 10000
-n = 24
+numTrial = 100
+n = 120 
 kappa = 0.5 / n
 v = 0.002
 
@@ -14,7 +14,7 @@ v_dec = str(v - int(v))[2:]
 
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs_histogram'
+folder_name = 'outputs/histogram'
 
 # read the files
 experiment_name = 'kappa_' + kappa_dec + '_trial_' + str(numTrial) + '_sample_' + str(n) + '_risk_' + v_dec
@@ -65,9 +65,10 @@ pyplot.xlabel('Expected Return')
 pyplot.figtext(0.1, -0.05, 'k = ' + str(kappa) + ', |T| = ' + str(numTrial) + ', n = ' + str(n) + ', v = ' + str(v))
 pyplot.figtext(0.1, -0.11, markowitz_text)
 pyplot.figtext(0.1, -0.16, robust_text)
-pyplot.show()
+# pyplot.show()
 
 # save the figure as pdf
 file_name = experiment_name + '.pdf'
 save_directory = os.path.join(project_directory, folder_name, file_name)
 fig.savefig(save_directory, bbox_inches="tight")
+
