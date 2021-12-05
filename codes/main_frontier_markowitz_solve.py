@@ -1,5 +1,5 @@
 import time
-from functions_new import *
+from functions import *
 
 start = time.time()
 

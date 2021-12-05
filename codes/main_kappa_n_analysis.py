@@ -1,6 +1,6 @@
 # This script is used to run the experiments.
 
-from functions_new import *
+from functions import *
 import os
 
 seed = 0

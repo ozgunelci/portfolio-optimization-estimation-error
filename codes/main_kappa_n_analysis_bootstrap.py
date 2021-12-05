@@ -1,6 +1,6 @@
 # This script is used to evaluate the experiments.
 
-from functions_new import *
+from functions import *
 import os
 import time
 
