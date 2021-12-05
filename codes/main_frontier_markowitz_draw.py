@@ -8,18 +8,24 @@ seed = 0
 numSamples = 24
 numTrials = 10
 
-experiment_name = '_figure_markowitz'
-experiment_name += '_seed_' + str(seed) + '_sample_' + str(numSamples) + '_trial_' + str(numTrials)
+experiment_name = "_figure_markowitz"
+experiment_name += (
+    "_seed_" + str(seed) + "_sample_" + str(numSamples) + "_trial_" + str(numTrials)
+)
 
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs/frontier'
+folder_name = "outputs/frontier"
 
-file_name_markowitz_actual = 'markowitz_actual' + experiment_name + '.txt'
-file_name_markowitz_estimated = 'markowitz_estimated' + experiment_name + '.txt'
+file_name_markowitz_actual = "markowitz_actual" + experiment_name + ".txt"
+file_name_markowitz_estimated = "markowitz_estimated" + experiment_name + ".txt"
 
-markowitz_actual_directory = os.path.join(project_directory, folder_name, file_name_markowitz_actual)
-markowitz_estimated_directory = os.path.join(project_directory, folder_name, file_name_markowitz_estimated)
+markowitz_actual_directory = os.path.join(
+    project_directory, folder_name, file_name_markowitz_actual
+)
+markowitz_estimated_directory = os.path.join(
+    project_directory, folder_name, file_name_markowitz_estimated
+)
 
 data = read_burak_data()
 mu = data.trueExpectedReturn
@@ -45,10 +51,17 @@ markowitz_actual_frontier = np.loadtxt(markowitz_actual_directory)
 markowitz_estimated_frontier = np.loadtxt(markowitz_estimated_directory)
 
 # draw the figure
-drawFrontiers(experiment_name, true_frontier, v_array,
-              markowitz_estimated_frontier, markowitz_actual_frontier,
-              equal_frontier, v_equal_frontier,
-              -1, -1)
+drawFrontiers(
+    experiment_name,
+    true_frontier,
+    v_array,
+    markowitz_estimated_frontier,
+    markowitz_actual_frontier,
+    equal_frontier,
+    v_equal_frontier,
+    -1,
+    -1,
+)
 
 end = time.time()
 time_elapsed = end - start

@@ -18,7 +18,7 @@ true_return = 0.01534932
 v_array = [0.002]
 
 project_directory = os.getcwd()
-folder_name = 'outputs/kappa_n'
+folder_name = "outputs/kappa_n"
 
 # initialize arrays
 robust_markowitz_difference_errors = np.zeros([len(samples_array), len(kappa_n_range)])
@@ -41,19 +41,39 @@ for i in range(len(samples_array)):
         v_dec = str(v - int(v))[2:]
 
         # Markowitz
-        experiment_name = 'kappa_' + '_trial_' + str(numTrials) + '_sample_' + str(numSamples) + '_risk_' + v_dec
-        file_name = 'markowitz_' + experiment_name + '.txt'
-        save_directory_markowitz = os.path.join(project_directory, folder_name, file_name)
+        experiment_name = (
+            "kappa_"
+            + "_trial_"
+            + str(numTrials)
+            + "_sample_"
+            + str(numSamples)
+            + "_risk_"
+            + v_dec
+        )
+        file_name = "markowitz_" + experiment_name + ".txt"
+        save_directory_markowitz = os.path.join(
+            project_directory, folder_name, file_name
+        )
         markowitz_actual_points = np.loadtxt(save_directory_markowitz)
 
         # Robust
-        experiment_name = 'kappa_' + kappa_dec + '_trial_' + str(numTrials) + '_sample_' + str(
-            numSamples) + '_risk_' + v_dec
-        file_name = 'robust_' + experiment_name + '.txt'
+        experiment_name = (
+            "kappa_"
+            + kappa_dec
+            + "_trial_"
+            + str(numTrials)
+            + "_sample_"
+            + str(numSamples)
+            + "_risk_"
+            + v_dec
+        )
+        file_name = "robust_" + experiment_name + ".txt"
         save_directory_robust = os.path.join(project_directory, folder_name, file_name)
         robust_actual_points = np.loadtxt(save_directory_robust)
 
-        result = perform_bootstrap_ratio_ver2(numBootstrap, markowitz_actual_points, robust_actual_points)
+        result = perform_bootstrap_ratio_ver2(
+            numBootstrap, markowitz_actual_points, robust_actual_points
+        )
         robust_markowitz_difference_errors[i][j] = result.bootstrap_error
 
         result = perform_bootstrap(numBootstrap, markowitz_actual_points)
@@ -65,26 +85,26 @@ for i in range(len(samples_array)):
 
 # write the results
 project_directory = os.getcwd()
-folder_name = 'outputs/kappa_n'
-file_name = 'bootstrap_error_results_kn.txt'
+folder_name = "outputs/kappa_n"
+file_name = "bootstrap_error_results_kn.txt"
 save_directory = os.path.join(project_directory, folder_name, file_name)
 
-file = open(save_directory, 'a')
+file = open(save_directory, "a")
 
 file.write("new_experiments \n")
 
 file.write("robust_markowitz_difference_errors\n")
-np.savetxt(file, robust_markowitz_difference_errors, delimiter='\t')
+np.savetxt(file, robust_markowitz_difference_errors, delimiter="\t")
 file.write("\n")
 file.write("\n")
 
 file.write("markowitz_errors\n")
-np.savetxt(file, markowitz_errors, delimiter='\t')
+np.savetxt(file, markowitz_errors, delimiter="\t")
 file.write("\n")
 file.write("\n")
 
 file.write("robust_errors\n")
-np.savetxt(file, robust_errors, delimiter='\t')
+np.savetxt(file, robust_errors, delimiter="\t")
 file.write("\n")
 file.write("\n")
 

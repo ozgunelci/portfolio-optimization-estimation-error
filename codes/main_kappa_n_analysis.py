@@ -32,13 +32,14 @@ for i in range(len(samples_array)):
 
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs/kappa_n'
+folder_name = "outputs/kappa_n"
 
-file_name_markowitz = 'markowitz_results_kn.txt'
-save_directory_markowitz = os.path.join(project_directory, folder_name, file_name_markowitz)
-np.savetxt(save_directory_markowitz, markowitz_returns, delimiter='\t')
+file_name_markowitz = "markowitz_results_kn.txt"
+save_directory_markowitz = os.path.join(
+    project_directory, folder_name, file_name_markowitz
+)
+np.savetxt(save_directory_markowitz, markowitz_returns, delimiter="\t")
 
-file_name_robust = 'robust_results_kn.txt'
+file_name_robust = "robust_results_kn.txt"
 save_directory_robust = os.path.join(project_directory, folder_name, file_name_robust)
-np.savetxt(save_directory_robust, robust_returns, delimiter='\t')
-
+np.savetxt(save_directory_robust, robust_returns, delimiter="\t")

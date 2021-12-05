@@ -8,8 +8,16 @@ seed = 0
 numSamples = 24
 numTrials = 10
 
-experiment_name = '_figure_robust'
-experiment_name += '_error_cov_0001' + '_seed_' + str(seed) + '_sample_' + str(numSamples) + '_trial_' + str(numTrials)
+experiment_name = "_figure_robust"
+experiment_name += (
+    "_error_cov_0001"
+    + "_seed_"
+    + str(seed)
+    + "_sample_"
+    + str(numSamples)
+    + "_trial_"
+    + str(numTrials)
+)
 
 muHat = getMuHat(numTrials, numSamples, seed)
 
@@ -27,7 +35,7 @@ v_array = np.linspace(v_begin, v_end, int(num_v) + 1)
 kappa = 1
 epsilon = 0.001
 # error_covariance_matrix = kappa * kappa * np.ones(11) * 0.0001
-diagonal = np.array([1,1,1,1,1,1,1,epsilon,1,1,1])
+diagonal = np.array([1, 1, 1, 1, 1, 1, 1, epsilon, 1, 1, 1])
 error_covariance_matrix = kappa * kappa * diagonal
 
 assets = range(11)
@@ -51,25 +59,25 @@ robust_actual_frontier = robust_results.actual_frontier
 # save the results to a txt file
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs/frontier'
+folder_name = "outputs/frontier"
 
 # markowitz actual
-file_name = 'markowitz_actual' + experiment_name + '.txt'
+file_name = "markowitz_actual" + experiment_name + ".txt"
 save_directory = os.path.join(project_directory, folder_name, file_name)
 np.savetxt(save_directory, markowitz_actual_frontier)
 
 # markowitz estimated
-file_name = 'markowitz_estimated' + experiment_name + '.txt'
+file_name = "markowitz_estimated" + experiment_name + ".txt"
 save_directory = os.path.join(project_directory, folder_name, file_name)
 np.savetxt(save_directory, markowitz_estimated_frontier)
 
 # robust actual
-file_name = 'robust_actual' + experiment_name + '.txt'
+file_name = "robust_actual" + experiment_name + ".txt"
 save_directory = os.path.join(project_directory, folder_name, file_name)
 np.savetxt(save_directory, robust_actual_frontier)
 
 # markowitz estimated
-file_name = 'robust_estimated' + experiment_name + '.txt'
+file_name = "robust_estimated" + experiment_name + ".txt"
 save_directory = os.path.join(project_directory, folder_name, file_name)
 np.savetxt(save_directory, robust_estimated_frontier)
 

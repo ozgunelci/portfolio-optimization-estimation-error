@@ -8,8 +8,10 @@ seed = 0
 numSamples = 24
 numTrials = 10
 
-experiment_name = '_figure_markowitz'
-experiment_name += '_seed_' + str(seed) + '_sample_' + str(numSamples) + '_trial_' + str(numTrials)
+experiment_name = "_figure_markowitz"
+experiment_name += (
+    "_seed_" + str(seed) + "_sample_" + str(numSamples) + "_trial_" + str(numTrials)
+)
 
 muHat = getMuHat(numTrials, numSamples, seed)
 
@@ -33,15 +35,15 @@ markowitz_actual_frontier = markowitz_results.actual_frontier
 # save the results to a txt file
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs/frontier'
+folder_name = "outputs/frontier"
 
 # markowitz actual
-file_name = 'markowitz_actual' + experiment_name + '.txt'
+file_name = "markowitz_actual" + experiment_name + ".txt"
 save_directory = os.path.join(project_directory, folder_name, file_name)
 np.savetxt(save_directory, markowitz_actual_frontier)
 
 # markowitz estimated
-file_name = 'markowitz_estimated' + experiment_name + '.txt'
+file_name = "markowitz_estimated" + experiment_name + ".txt"
 save_directory = os.path.join(project_directory, folder_name, file_name)
 np.savetxt(save_directory, markowitz_estimated_frontier)
 

@@ -17,14 +17,25 @@ start = time.time()
 seed = 0
 numSamples = 120
 numTrials = 100
-kappa = 0.5 / numSamples   # this is not used for the Markowitz model - kept here to align with the robust model.
+kappa = (
+    0.5 / numSamples
+)  # this is not used for the Markowitz model - kept here to align with the robust model.
 v_array = [0.002]
 
 # experiment name
 v = v_array[0]
 kappa_dec = str(kappa - int(kappa))[2:]
 v_dec = str(v - int(v))[2:]
-experiment_name = 'kappa_' + kappa_dec + '_trial_' + str(numTrials) + '_sample_' + str(numSamples) + '_risk_' + v_dec
+experiment_name = (
+    "kappa_"
+    + kappa_dec
+    + "_trial_"
+    + str(numTrials)
+    + "_sample_"
+    + str(numSamples)
+    + "_risk_"
+    + v_dec
+)
 
 # get samples
 muHat = getMuHat(numTrials, numSamples, seed)
@@ -44,21 +55,21 @@ robust_results = getFrontier_points_final(assets, v_array, muHat, errorCov, mu, 
 robust_estimated_points = robust_results.estimated_points
 robust_actual_points = robust_results.actual_points
 robust_actual_points = np.transpose(robust_actual_points)
-print('robust actual = ' + str( sum(robust_actual_points) / numTrials) )
+print("robust actual = " + str(sum(robust_actual_points) / numTrials))
 
 # get the directory of the project
 project_directory = os.getcwd()
-folder_name = 'outputs/histogram'
+folder_name = "outputs/histogram"
 
 # save the actual points to a txt file
-file_name = 'robust_actual_' + experiment_name + '.txt'
+file_name = "robust_actual_" + experiment_name + ".txt"
 save_directory = os.path.join(project_directory, folder_name, file_name)
 np.savetxt(save_directory, robust_actual_points)
 
 # save the solution to a txt file
 solution = robust_results.optimal_solution[0]
 solution = np.transpose(solution)
-file_name = 'robust_solution_' + experiment_name + '.txt'
+file_name = "robust_solution_" + experiment_name + ".txt"
 save_directory = os.path.join(project_directory, folder_name, file_name)
 np.savetxt(save_directory, solution)
 
