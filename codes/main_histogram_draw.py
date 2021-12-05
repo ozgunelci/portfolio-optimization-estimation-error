@@ -9,7 +9,7 @@ kappa = 0.5 / n
 v = 0.002
 
 # read the data
-kappa_dec = str(kappa - int(kappa))[2:]
+kappa_dec = str(round(kappa - int(kappa), 10))[2:]
 v_dec = str(v - int(v))[2:]
 
 # get the directory of the project

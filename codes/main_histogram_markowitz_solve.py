@@ -24,7 +24,7 @@ v_array = [0.002]
 
 # experiment name
 v = v_array[0]
-kappa_dec = str(kappa - int(kappa))[2:]
+kappa_dec = str(round(kappa - int(kappa), 10))[2:]
 v_dec = str(v - int(v))[2:]
 experiment_name = (
     "kappa_"
