@@ -6,10 +6,7 @@ import os
 
 def read_burak_data():
     class Data:
-        # read data from Excel
-        # return_data = pd.read_excel('data_burak.xlsx', sheet_name='true_return', index_col=None, header=None)
-        # cov_data = pd.read_excel('data_burak.xlsx', sheet_name='true_covariance', index_col=None, header=None)
-
+        # read data from the Excel file
         return_data = pd.read_excel(
             "inputs/data_burak.xlsx",
             sheet_name="true_return",
@@ -267,7 +264,7 @@ def getFrontier(assets, v_array, muHat, errorCov):
     return results
 
 
-def solveProblems_final(seed, numTrials, numSamples, kappa, assets):
+def solveProblems(seed, numTrials, numSamples, kappa, assets):
     # get samples
     muHat = getMuHat(numTrials, numSamples, seed)
     muHat_s = muHat[:, assets]
@@ -308,7 +305,7 @@ def solveProblems_final(seed, numTrials, numSamples, kappa, assets):
     errorCov = np.ones(numAssets) * kappa_square
 
     if kappa < 0:
-        markowitz_results = getFrontier_points_final(
+        markowitz_results = getFrontier_points(
             assets, v_array, muHat_s, -1, mu_s, sigma_s
         )
         markowitz_actual_points = markowitz_results.actual_points
@@ -322,7 +319,7 @@ def solveProblems_final(seed, numTrials, numSamples, kappa, assets):
         np.savetxt(save_directory_markowitz, markowitz_actual_points)
 
     else:
-        robust_results = getFrontier_points_final(
+        robust_results = getFrontier_points(
             assets, v_array, muHat_s, errorCov, mu_s, sigma_s
         )
         robust_actual_points = robust_results.actual_points
@@ -336,7 +333,7 @@ def solveProblems_final(seed, numTrials, numSamples, kappa, assets):
     return actual
 
 
-def getFrontier_points_final(assets, v_array, muHat, errorCov, mu, sigma):
+def getFrontier_points(assets, v_array, muHat, errorCov, mu, sigma):
     numTrials = len(muHat)
 
     actual = np.zeros([len(v_array), numTrials])
@@ -362,86 +359,6 @@ def getFrontier_points_final(assets, v_array, muHat, errorCov, mu, sigma):
     return results
 
 
-def solveProblems_2d(
-    seed, numTrials, numSamples, kappa1, kappa2, assets, asset_group1, asset_group2
-):
-    # get samples
-    muHat = getMuHat(numTrials, numSamples, seed)
-    muHat_s = muHat[:, assets]
-
-    numAssets = len(assets)
-
-    v_array = [0.002]
-
-    # file name
-    v = v_array[0]
-    kappa1_dec = str(round(kappa1 - int(kappa1), 10))[2:]
-    kappa2_dec = str(round(kappa2 - int(kappa2), 10))[2:]
-    v_dec = str(v - int(v))[2:]
-    experiment_name = (
-        "kappa1_"
-        + kappa1_dec
-        + "kappa2_"
-        + kappa2_dec
-        + "_trial_"
-        + str(numTrials)
-        + "_sample_"
-        + str(numSamples)
-        + "_risk_"
-        + v_dec
-    )
-
-    project_directory = os.getcwd()
-    folder_name = "outputs_kappa_n"
-
-    # obtain solutions
-    data = read_burak_data()
-    mu = data.trueExpectedReturn
-    sigma = data.trueCovarianceReturn
-    mu = np.array(mu)
-    sigma = np.array(sigma)
-    mu_s = mu[assets]
-    sigma_s = sigma[:, assets]
-    sigma_s = sigma_s[assets, :]
-
-    kappa1_square = kappa1 * kappa1
-    kappa2_square = kappa2 * kappa2
-    errorCov = np.ones(numAssets)
-    for i in asset_group1:
-        errorCov[i] = errorCov[i] * kappa1_square
-
-    for i in asset_group2:
-        errorCov[i] = errorCov[i] * kappa2_square
-
-    if kappa1 < 0:
-        markowitz_results = getFrontier_points_final(
-            assets, v_array, muHat_s, -1, mu_s, sigma_s
-        )
-        markowitz_actual_points = markowitz_results.actual_points
-        markowitz_actual_points = np.transpose(markowitz_actual_points)
-        actual = sum(markowitz_actual_points) / numTrials
-
-        file_name = "markowitz_" + experiment_name + ".txt"
-        save_directory_markowitz = os.path.join(
-            project_directory, folder_name, file_name
-        )
-        np.savetxt(save_directory_markowitz, markowitz_actual_points)
-
-    else:
-        robust_results = getFrontier_points_final(
-            assets, v_array, muHat_s, errorCov, mu_s, sigma_s
-        )
-        robust_actual_points = robust_results.actual_points
-        robust_actual_points = np.transpose(robust_actual_points)
-        actual = sum(robust_actual_points) / numTrials
-
-        file_name = "robust_" + experiment_name + ".txt"
-        save_directory_robust = os.path.join(project_directory, folder_name, file_name)
-        np.savetxt(save_directory_robust, robust_actual_points)
-
-    return actual
-
-
 def perform_bootstrap(no_bootstrap, sample_array):
     num_sample = len(sample_array)
     boot_distribution = np.zeros(no_bootstrap)
@@ -459,34 +376,7 @@ def perform_bootstrap(no_bootstrap, sample_array):
     return Results
 
 
-def perform_bootstrap_ratio(no_bootstrap, sample_array_markowitz, sample_array_robust):
-    true_return = 0.01534932
-    num_sample = len(sample_array_markowitz)
-    returns = np.array(range(num_sample))
-    boot_distribution = np.zeros(no_bootstrap)
-
-    for k in range(no_bootstrap):
-        boot_sample_indices = np.random.choice(returns, replace=True, size=num_sample)
-        average_markowitz = (
-            sum(sample_array_markowitz[t] for t in boot_sample_indices) / num_sample
-        )
-        average_robust = (
-            sum(sample_array_robust[t] for t in boot_sample_indices) / num_sample
-        )
-        boot_statistic = ((average_robust - average_markowitz) * 100) / (
-            true_return - average_markowitz
-        )
-        boot_distribution[k] = boot_statistic
-
-    class Results:
-        bootstrap_distribution = boot_distribution
-        bootstrap_error = np.std(boot_distribution)
-        bootstrap_CI = np.percentile(boot_distribution, [2.5, 97.5])
-
-    return Results
-
-
-def perform_bootstrap_ratio_ver2(
+def perform_bootstrap_ratio(
     no_bootstrap, sample_array_markowitz, sample_array_robust
 ):
     # this is a much faster implementation of the previous one.
@@ -519,34 +409,3 @@ def perform_bootstrap_ratio_ver2(
 
     return Results
 
-
-def perform_bootstrap_rrdifference(
-    no_bootstrap, sample_array_robust1, sample_array_robust2
-):
-    # this is a much faster implementation of the previous one.
-    num_sample = len(sample_array_robust1)
-    boot_distribution = np.zeros(no_bootstrap)
-
-    for k in range(no_bootstrap):
-        np.random.seed(k)
-        average_robust1 = (
-            sum(np.random.choice(sample_array_robust1, replace=True, size=num_sample))
-            / num_sample
-        )
-
-        np.random.seed(k)
-        average_robust2 = (
-            sum(np.random.choice(sample_array_robust2, replace=True, size=num_sample))
-            / num_sample
-        )
-
-        boot_statistic = average_robust1 - average_robust2
-        boot_distribution[k] = boot_statistic
-
-    class Results:
-        bootstrap_distribution = boot_distribution
-        bootstrap_error = np.std(boot_distribution)
-        bootstrap_CI_twoSided = np.percentile(boot_distribution, [2.5, 97.5])
-        bootstrap_CI_oneSided = np.percentile(boot_distribution, 5)
-
-    return Results

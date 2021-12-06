@@ -71,7 +71,7 @@ for i in range(len(samples_array)):
         save_directory_robust = os.path.join(project_directory, folder_name, file_name)
         robust_actual_points = np.loadtxt(save_directory_robust)
 
-        result = perform_bootstrap_ratio_ver2(
+        result = perform_bootstrap_ratio(
             numBootstrap, markowitz_actual_points, robust_actual_points
         )
         robust_markowitz_difference_errors[i][j] = result.bootstrap_error

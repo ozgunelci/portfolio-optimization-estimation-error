@@ -47,7 +47,7 @@ mu = data.trueExpectedReturn
 sigma = data.trueCovarianceReturn
 
 # obtain solutions
-markowitz_results = getFrontier_points_final(assets, v_array, muHat, -1, mu, sigma)
+markowitz_results = getFrontier_points(assets, v_array, muHat, -1, mu, sigma)
 markowitz_estimated_points = markowitz_results.estimated_points
 markowitz_actual_points = markowitz_results.actual_points
 markowitz_actual_points = np.transpose(markowitz_actual_points)

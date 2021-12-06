@@ -18,7 +18,7 @@ markowitz_returns = np.zeros([numSamples, numKappa])
 assets = range(11)
 
 for i in range(numSamples):
-    result = solveProblems_final(seed, numTrials, samples_array[i], -1, assets)
+    result = solveProblems(seed, numTrials, samples_array[i], -1, assets)
     for j in range(numKappa):
         markowitz_returns[i][j] = result
 
@@ -26,7 +26,7 @@ for i in range(len(samples_array)):
     for j in range(len(kappa_n_range)):
         print(j)
         kappa = kappa_n_range[j] / samples_array[i]
-        result = solveProblems_final(seed, numTrials, samples_array[i], kappa, assets)
+        result = solveProblems(seed, numTrials, samples_array[i], kappa, assets)
         robust_returns[i][j] = result
 
 

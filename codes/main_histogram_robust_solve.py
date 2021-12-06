@@ -51,7 +51,7 @@ kappa_square = kappa * kappa
 errorCov = np.ones(11) * kappa_square
 
 # obtain solutions
-robust_results = getFrontier_points_final(assets, v_array, muHat, errorCov, mu, sigma)
+robust_results = getFrontier_points(assets, v_array, muHat, errorCov, mu, sigma)
 robust_estimated_points = robust_results.estimated_points
 robust_actual_points = robust_results.actual_points
 robust_actual_points = np.transpose(robust_actual_points)
