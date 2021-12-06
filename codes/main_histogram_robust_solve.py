@@ -2,10 +2,8 @@ import time
 from functions import *
 import os
 
-# USED FOR THE PAPER
-
 # Purpose:
-# This file solves numTrials many portfolio optimization problems
+# This file solves numTrials many robust portfolio optimization problems
 # for the specified input setting.
 # It saves the optimal objective function values as well as the
 # optimal solutions.

@@ -2,8 +2,6 @@ import time
 from functions import *
 import os
 
-# USED FOR THE PAPER
-
 # Purpose:
 # This file solves numTrials many portfolio optimization problems
 # for the specified input setting.
