@@ -1,7 +1,13 @@
-# This script is used to run the experiments.
-
 from functions import *
 import os
+import time
+
+# Purpose:
+# This script is used solve numTrials many robust
+# and Markowitz portfolio optimization problems for a range
+# of kappa and n values.
+
+start = time.time()
 
 seed = 0
 numTrials = 10
@@ -43,3 +49,9 @@ np.savetxt(save_directory_markowitz, markowitz_returns, delimiter="\t")
 file_name_robust = "robust_results_kn.txt"
 save_directory_robust = os.path.join(project_directory, folder_name, file_name_robust)
 np.savetxt(save_directory_robust, robust_returns, delimiter="\t")
+
+# print time elapsed
+end = time.time()
+time_elapsed = end - start
+print(time_elapsed)
+

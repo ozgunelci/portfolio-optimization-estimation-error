@@ -1,6 +1,11 @@
 import time
 from functions import *
 
+# Purpose:
+# This script is used to draw Markowitz frontier.
+# It requires the output files from main_frontier_markowitz_solve.py
+# for the specified input setting.
+
 start = time.time()
 
 # input

@@ -3,7 +3,7 @@ from functions import *
 import os
 
 # Purpose:
-# This file solves numTrials many robust portfolio optimization problems
+# This script solves numTrials many robust portfolio optimization problems
 # for the specified input setting.
 # It saves the optimal objective function values as well as the
 # optimal solutions.

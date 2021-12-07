@@ -3,7 +3,7 @@ from matplotlib import pyplot
 import os
 
 # Purpose:
-# This file is used to draw the histogram figures.
+# This script is used to draw the histogram figures.
 # It requires the output files from
 # main_histogram_markowitz_solve.py and main_histogram_robust_solve.py
 # for the specified input setting.

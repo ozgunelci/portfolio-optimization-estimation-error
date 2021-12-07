@@ -1,6 +1,12 @@
 import time
 from functions import *
 
+# Purpose:
+# This script solves numTrials many portfolio optimization problems
+# for the specified input setting.
+# It saves the optimal objective function values.
+# The output is used to draw Markowitz frontier.
+
 start = time.time()
 
 # input

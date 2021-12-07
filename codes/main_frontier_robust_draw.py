@@ -1,6 +1,11 @@
 import time
 from functions import *
 
+# Purpose:
+# This script is used to draw Robust and Markowitz frontier.
+# It requires the output files from main_frontier_robust_solve.py
+# for the specified input setting.
+
 start = time.time()
 
 # input

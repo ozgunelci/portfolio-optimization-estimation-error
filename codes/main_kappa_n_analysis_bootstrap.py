@@ -1,8 +1,10 @@
-# This script is used to evaluate the experiments.
-
 from functions import *
 import os
 import time
+
+# Purpose:
+# This script is used compute the standard error of the averages
+# obtained by main_kappa_n_analysis.py script.
 
 start = time.time()
 
