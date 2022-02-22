@@ -13,8 +13,8 @@ start = time.time()
 
 # input
 seed = 0
-numSamples = 120
-numTrials = 100
+numSamples = 3
+numTrials = 10000
 kappa = (
     0.5 / numSamples
 )  # this is not used for the Markowitz model - kept here to align with the robust model.

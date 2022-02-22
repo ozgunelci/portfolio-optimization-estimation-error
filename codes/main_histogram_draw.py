@@ -9,8 +9,8 @@ import os
 # for the specified input setting.
 
 # inputs
-numTrial = 100
-n = 120
+numTrial = 10000
+n = 24
 kappa = 0.5 / n
 v = 0.002
 
@@ -97,20 +97,20 @@ ax.set_ylim([0, 1100])
 pyplot.legend(loc="upper left")
 pyplot.title(plot_title)
 pyplot.xlabel("Expected Return")
-pyplot.figtext(
-    0.1,
-    -0.05,
-    "k = "
-    + str(kappa)
-    + ", |T| = "
-    + str(numTrial)
-    + ", n = "
-    + str(n)
-    + ", v = "
-    + str(v),
-)
-pyplot.figtext(0.1, -0.11, markowitz_text)
-pyplot.figtext(0.1, -0.16, robust_text)
+# pyplot.figtext(
+#     0.1,
+#     -0.05,
+#     "k = "
+#     + str(kappa)
+#     + ", |T| = "
+#     + str(numTrial)
+#     + ", n = "
+#     + str(n)
+#     + ", v = "
+#     + str(v),
+# )
+pyplot.figtext(0.1, -0.05, markowitz_text)
+pyplot.figtext(0.1, -0.11, robust_text)
 # pyplot.show()
 
 # save the figure as pdf

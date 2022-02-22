@@ -376,9 +376,7 @@ def perform_bootstrap(no_bootstrap, sample_array):
     return Results
 
 
-def perform_bootstrap_ratio(
-    no_bootstrap, sample_array_markowitz, sample_array_robust
-):
+def perform_bootstrap_ratio(no_bootstrap, sample_array_markowitz, sample_array_robust):
     # this is a much faster implementation of the previous one.
     true_return = 0.01534932
     num_sample = len(sample_array_markowitz)
@@ -408,4 +406,3 @@ def perform_bootstrap_ratio(
         bootstrap_CI = np.percentile(boot_distribution, [2.5, 97.5])
 
     return Results
-
