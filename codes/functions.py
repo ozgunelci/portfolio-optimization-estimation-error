@@ -406,3 +406,210 @@ def perform_bootstrap_ratio(no_bootstrap, sample_array_markowitz, sample_array_r
         bootstrap_CI = np.percentile(boot_distribution, [2.5, 97.5])
 
     return Results
+
+def getFrontier_garlappi(assets, gamma_array, muHat, errorCov):
+    actual = np.zeros(len(gamma_array))
+    estimated = np.zeros(len(gamma_array))
+
+    data = read_burak_data()
+
+    mu = data.trueExpectedReturn
+    sigma = data.trueCovarianceReturn
+
+    numTrials = len(muHat)
+
+    for t in range(numTrials):
+        print(t)
+        for v in range(len(gamma_array)):
+            result = solve_portfolio_garlappi(muHat[t], sigma, gamma_array[v], errorCov)
+            estimated[v] += result.optimal_value
+            actual[v] += sum(mu[i] * result.x_val[i] for i in assets)
+
+    class results:
+        actual_frontier = actual / numTrials
+        estimated_frontier = estimated / numTrials
+
+    return results
+
+
+def solve_portfolio_garlappi(mu, Sigma, gamma, errorCov):
+    # mu is an one-dimensional array
+    # sigma is a two-dimensional array
+    # v is a scalar
+    # errorCov -1 means the model is not robust.
+    # if errorCov is an one-dimensional array, then the errorCov is diagonal.
+    # this problem does not feature a kappa term, kappa should be embedded
+    # to the error covariance matrix
+
+    if type(errorCov) == int:
+        modelRobust = False
+    else:
+        modelRobust = True
+        if errorCov.ndim == 1:
+            errorCov = np.diag(errorCov)
+
+    assets = list(range(len(mu)))
+
+    # initialize pyomo model
+    model = ConcreteModel()
+
+    # add the decision variables
+    def variable_bounds(model, i):
+        return (0, 1)
+
+    def variable_initialize(model, i):
+        return 0.05
+
+    model.x = Var(assets, within=Reals, initialize=variable_initialize)
+
+    # bounds = variable_bounds,
+
+    # add the objective function
+    def objective_rule(model):
+        expr = sum(mu[i] * model.x[i] for i in assets) - gamma * sum(Sigma[i][j] * model.x[i] * model.x[j] for i in assets for j in assets)
+        if modelRobust:
+            expr -= sqrt(
+                sum(
+                    errorCov[i][j] * model.x[i] * model.x[j]
+                    for i in assets
+                    for j in assets
+                )
+            )
+        return expr
+
+    model.obj = Objective(rule=objective_rule, sense=maximize)
+
+    # add the constraints
+    model.total_asset = Constraint(expr=sum(model.x[i] for i in assets) == 1)
+
+    # model.variance = Constraint(
+    #     expr=sum(Sigma[i][j] * model.x[i] * model.x[j] for i in assets for j in assets)
+    #     <= v
+    # )
+
+    def nonNegativity_rule(model, i):
+        return model.x[i] >= 0
+
+    model.nonNegativity = Constraint(assets, rule=nonNegativity_rule)
+
+    model.dual = Suffix(direction=Suffix.IMPORT)
+
+    # specify the solver
+    solver_name = "ipopt"
+    solver = SolverFactory(solver_name)
+    if solver_name == "ipopt":
+        # a list of ipopt options: https://www.coin-or.org/Bonmin/option_pages/options_list_ipopt.html
+        solver.options["max_cpu_time"] = 60
+
+    # solve the optimization model
+    results = solver.solve(model)
+    model.solutions.store_to(results)
+
+    class Results:
+        # if solver_name == 'ip_opt':
+
+        solution_status = results.Solution.Status
+        optimal_value = results.Solution.objective["obj"]["Value"]
+        active_variance = sum(
+            value(model.x[i]) * value(model.x[j]) * Sigma[i][j]
+            for i in assets
+            for j in assets
+        )
+
+        x_val = np.zeros(len(assets))
+        for i in assets:
+            x_val[i] = value(model.x[i])
+
+        # lambda1_val = model.dual.get(model.variance)
+        # lambda2_val = model.dual.get(model.total_asset)
+        # lambda3_val = np.zeros(len(assets))
+        # for i in assets:
+        #     lambda3_val[i] = model.dual.get(model.nonNegativity[i])
+
+    return Results    
+
+
+def drawFrontiers_garlappi(
+    name,
+    true_frontier,
+    gamma_array_index,
+    markowitz_estimated_frontier,
+    markowitz_actual_frontier,
+    equal_frontier,
+    v_equal_frontier,
+    robust_estimated_frontier,
+    robust_actual_frontier,
+):
+
+    true_frontier = np.flip(true_frontier)
+    markowitz_actual_frontier = np.flip(markowitz_actual_frontier)
+    robust_actual_frontier = np.flip(robust_actual_frontier)
+
+    import matplotlib.pyplot as plt
+
+    f = plt.figure()
+    ax = f.add_subplot(111)
+
+    plt.plot(
+        v_equal_frontier,
+        equal_frontier,
+        label="equal",
+        color="gray",
+        linestyle="dashed",
+    )
+
+    plt.plot(gamma_array_index, true_frontier, label="true", linewidth=2)
+    plt.plot(
+        gamma_array_index,
+        markowitz_actual_frontier,
+        label="actual_markowitz",
+        marker="o",
+        linewidth=1.5,
+        color="orange",
+        markersize=4,
+    )
+    # plt.plot(v_array, markowitz_estimated_frontier, label='estimated_markowitz', marker='o', linewidth=1.5, color='red',
+    #          markersize=4)
+
+    if type(robust_estimated_frontier) != int:
+        plt.plot(
+            gamma_array_index,
+            robust_actual_frontier,
+            label="actual_robust",
+            marker="o",
+            linewidth=1.5,
+            color="yellowgreen",
+            markersize=4,
+        )
+        # plt.plot(v_array, robust_estimated_frontier, label='estimated_robust', marker='o', linewidth=1.5,
+        #          color='purple', markersize=4)
+
+    plt.legend()
+
+    plt.xlabel("log_2(gamma)")
+    plt.ylabel("expected return")
+
+    # plt.xlim(0.00115, 0.0041)
+    # #    plt.ylim(0.01, 0.03)
+    plt.ylim(0.012, 0.022)
+
+    # plt.title('Line graph!')
+
+    ratio = 0.75
+    xleft, xright = ax.get_xlim()
+    ybottom, ytop = ax.get_ylim()
+    # the abs method is used to make sure that all numbers are positive
+    # because x and y axis of an axes maybe inversed.
+    ax.set_aspect(abs((xright - xleft) / (ybottom - ytop)) * ratio)
+
+    # plt.show()
+
+    # get the directory of the project
+    project_directory = os.getcwd()
+    folder_name = "outputs\\frontier_garlappi"
+    figure_name = name + ".pdf"
+    save_directory = os.path.join(project_directory, folder_name, figure_name)
+
+    f.savefig(save_directory, bbox_inches="tight")
+
+    
